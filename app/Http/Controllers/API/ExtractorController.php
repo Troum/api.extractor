@@ -22,6 +22,7 @@ class ExtractorController extends Controller
      */
     public function extract(Request $request): JsonResponse
     {
+
         try {
             $uploaded = FileService::storeUploadedFile($request);
             $downloadURL = $this->extractorService->getExtractedFile($uploaded);
