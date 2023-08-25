@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Jobs\RemoveFileInTwentyFourHoursJob;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Spatie\PdfToImage\Exceptions\PageDoesNotExist;
@@ -31,7 +30,6 @@ class ExtractorService
     private function extractTextContent(): Application|UrlGenerator|string
     {
         $pdfHandler = new Pdf($this->uploaded);
-
         for ($i = 1; $i <= $pdfHandler->getNumberOfPages(); $i++) {
             $pdfHandler->setPage($i)
                 ->saveImage(storage_path("/app/public/converted/image_$i.png"));

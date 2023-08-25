@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\FileService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,8 +31,8 @@ class RemoveFileInTwentyFourHoursJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        Fil
+        FileService::deleteFile($this->name);
     }
 }

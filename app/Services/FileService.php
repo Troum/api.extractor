@@ -19,7 +19,10 @@ class FileService
     public static function storeUploadedFile(Request $request): bool|string
     {
         $name = Str::random(8) . '.pdf';
+
         Storage::putFileAs('public/uploaded', $request->file('file'), $name);
+
+        self::createConvertedDirectory();
 
         return realpath(storage_path("app/public/uploaded/$name"));
     }
@@ -31,19 +34,41 @@ class FileService
     public static function storeExtractedFile(mixed $content): Application|UrlGenerator|string
     {
         $name = Str::random(8) . '.txt';
-        Storage::putFileAs('public/text', $content, $name);
+
+        Storage::put("public/text/$name", $content);
 
         dispatch(new RemoveFileInTwentyFourHoursJob($name))
             ->delay(now()->addHours(24));
+
+        self::clearFolder();
 
         return url(Storage::url('public/text' . '/' . $name ));
     }
 
     /**
+     * @return void
+     */
+    private static function clearFolder(): void
+    {
+        File::deleteDirectory(storage_path("/app/public/converted"));
+    }
+
+    /**
+     * @return void
+     */
+    private static function createConvertedDirectory(): void
+    {
+        if (!File::exists(storage_path("/app/public/converted"))) {
+            File::makeDirectory(storage_path("/app/public/converted"));
+        }
+    }
+
+
+    /**
      * @param string $name
      * @return void
      */
-    public static function clearFolder(string $name): void
+    public static function deleteFile(string $name): void
     {
         File::delete(storage_path("/app/public/converted/$name"));
     }
