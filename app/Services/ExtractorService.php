@@ -17,6 +17,14 @@ class ExtractorService
     private mixed $uploaded;
 
     /**
+     * Constructor for class
+     */
+    public function __construct()
+    {
+        $this->content = '';
+    }
+
+    /**
      * @throws PageDoesNotExist
      * @throws PdfDoesNotExist
      */

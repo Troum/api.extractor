@@ -22,7 +22,6 @@ class ExtractorController extends Controller
      */
     public function extract(Request $request): JsonResponse
     {
-
         try {
             $uploaded = FileService::storeUploadedFile($request);
             $downloadURL = $this->extractorService->getExtractedFile($uploaded);
@@ -38,8 +37,10 @@ class ExtractorController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $exception->getMessage(),
-                'trace' => $exception->getTrace()
-            ]);
+                'line' => $exception->getLine(),
+                'file' => $exception->getFile(),
+                'trace' => $exception->getTrace(),
+            ], 409);
         }
     }
 }
